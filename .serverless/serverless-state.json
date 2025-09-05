@@ -7,10 +7,7 @@
     "provider": {
       "name": "aws",
       "runtime": "nodejs18.x",
-      "region": "us-east-2",
-      "environment": {
-        "DYNAMODB_TABLE": "AppointmentTable"
-      },
+      "region": "us-east-1",
       "iam": {
         "role": {
           "statements": [
@@ -20,33 +17,13 @@
                 "dynamodb:PutItem",
                 "dynamodb:GetItem",
                 "dynamodb:Query",
-                "dynamodb:UpdateItem"
+                "dynamodb:UpdateItem",
+                "dynamodb:Scan"
               ],
-              "Resource": "arn:aws:dynamodb:us-east-2:*:table/AppointmentTable"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "sqs:SendMessage",
-                "sqs:ReceiveMessage",
-                "sqs:DeleteMessage",
-                "sqs:GetQueueAttributes"
-              ],
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "sns:Publish"
-              ],
-              "Resource": "*"
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "events:PutEvents"
-              ],
-              "Resource": "*"
+              "Resource": [
+                "arn:aws:dynamodb:us-east-1:257394458575:table/AppointmentTable",
+                "arn:aws:dynamodb:us-east-1:257394458575:table/AppointmentTable/index/123"
+              ]
             }
           ]
         }
@@ -218,15 +195,6 @@
                         "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][0]"
                       },
                       {
-                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][1]"
-                      },
-                      {
-                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][2]"
-                      },
-                      {
-                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][3]"
-                      },
-                      {
                         "Effect": "Allow",
                         "Action": [
                           "sqs:ReceiveMessage",
@@ -234,8 +202,8 @@
                           "sqs:GetQueueAttributes"
                         ],
                         "Resource": [
-                          "arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_PE",
-                          "arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_CL"
+                          "arn:aws:sqs:us-east-1:257394458575:SQS_PE",
+                          "arn:aws:sqs:us-east-1:257394458575:SQS_CL"
                         ]
                       }
                     ]
@@ -265,18 +233,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/rimac-appointments/dev/1757062795466-2025-09-05T08:59:55.466Z/rimac-appointments.zip"
+                "S3Key": "serverless/rimac-appointments/dev/1757088231759-2025-09-05T16:03:51.759Z/rimac-appointments.zip"
               },
-              "Handler": "src/handlers/createAppointment.createAppointment",
+              "Handler": "dist/handlers/createAppointment.createAppointment",
               "Runtime": "nodejs18.x",
               "FunctionName": "rimac-appointments-dev-createAppointment",
               "MemorySize": 1024,
               "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "DYNAMODB_TABLE": "AppointmentTable"
-                }
-              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -295,18 +258,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/rimac-appointments/dev/1757062795466-2025-09-05T08:59:55.466Z/rimac-appointments.zip"
+                "S3Key": "serverless/rimac-appointments/dev/1757088231759-2025-09-05T16:03:51.759Z/rimac-appointments.zip"
               },
-              "Handler": "src/handlers/getAppointments.getAppointments",
+              "Handler": "dist/handlers/getAppointments.getAppointments",
               "Runtime": "nodejs18.x",
               "FunctionName": "rimac-appointments-dev-getAppointments",
               "MemorySize": 1024,
               "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "DYNAMODB_TABLE": "AppointmentTable"
-                }
-              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -325,18 +283,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/rimac-appointments/dev/1757062795466-2025-09-05T08:59:55.466Z/rimac-appointments.zip"
+                "S3Key": "serverless/rimac-appointments/dev/1757088231759-2025-09-05T16:03:51.759Z/rimac-appointments.zip"
               },
-              "Handler": "src/handlers/appointment_pe.handler",
+              "Handler": "dist/handlers/appointment_pe.handler",
               "Runtime": "nodejs18.x",
               "FunctionName": "rimac-appointments-dev-appointment_pe",
               "MemorySize": 1024,
               "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "DYNAMODB_TABLE": "AppointmentTable"
-                }
-              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -355,18 +308,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/rimac-appointments/dev/1757062795466-2025-09-05T08:59:55.466Z/rimac-appointments.zip"
+                "S3Key": "serverless/rimac-appointments/dev/1757088231759-2025-09-05T16:03:51.759Z/rimac-appointments.zip"
               },
-              "Handler": "src/handlers/appointment_cl.handler",
+              "Handler": "dist/handlers/appointment_cl.handler",
               "Runtime": "nodejs18.x",
               "FunctionName": "rimac-appointments-dev-appointment_cl",
               "MemorySize": 1024,
               "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "DYNAMODB_TABLE": "AppointmentTable"
-                }
-              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -385,18 +333,13 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/rimac-appointments/dev/1757062795466-2025-09-05T08:59:55.466Z/rimac-appointments.zip"
+                "S3Key": "serverless/rimac-appointments/dev/1757088231759-2025-09-05T16:03:51.759Z/rimac-appointments.zip"
               },
-              "Handler": "src/handlers/updateAppointmentStatus.handler",
+              "Handler": "dist/handlers/updateAppointmentStatus.handler",
               "Runtime": "nodejs18.x",
               "FunctionName": "rimac-appointments-dev-updateAppointmentStatus",
               "MemorySize": 1024,
               "Timeout": 6,
-              "Environment": {
-                "Variables": {
-                  "DYNAMODB_TABLE": "AppointmentTable"
-                }
-              },
               "Role": {
                 "Fn::GetAtt": [
                   "IamRoleLambdaExecution",
@@ -408,54 +351,54 @@
               "UpdateAppointmentStatusLogGroup"
             ]
           },
-          "CreateAppointmentLambdaVersionZZofKfAoZGHzF1bdgYtHpE3WipcMbOQCOI54uCgNic": {
+          "CreateAppointmentLambdaVersionbT9YCi0hRPT3y7XyLDMZIBWrGDBtgdRCHREhTWvWA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CreateAppointmentLambdaFunction"
               },
-              "CodeSha256": "QpRDZ83qb7OHIKz5YP2Je2ITS8KguNSFOV7mti081EU="
+              "CodeSha256": "ZA+ioF8oUWlbnpYEkVI9xeecfXVagaVX201Pd8lQo+o="
             }
           },
-          "GetAppointmentsLambdaVersionabavNcbNoeKXPOnajXnkxFTMc3zW03cfOizg4gTQCt8": {
+          "GetAppointmentsLambdaVersion9dufMOqMs3kVbJobtLGpQ4f04c4JjF2bZpf694NGg": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "GetAppointmentsLambdaFunction"
               },
-              "CodeSha256": "QpRDZ83qb7OHIKz5YP2Je2ITS8KguNSFOV7mti081EU="
+              "CodeSha256": "ZA+ioF8oUWlbnpYEkVI9xeecfXVagaVX201Pd8lQo+o="
             }
           },
-          "AppointmentUnderscorepeLambdaVersioneZWAogunrfiGYRFJe6PgkZ8sKbMnxZMunMJVW9THeY": {
+          "AppointmentUnderscorepeLambdaVersionEjbH6e1qbTOgNxBIfhMV06RpOQ1QqFNNZWgeZV5c": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppointmentUnderscorepeLambdaFunction"
               },
-              "CodeSha256": "QpRDZ83qb7OHIKz5YP2Je2ITS8KguNSFOV7mti081EU="
+              "CodeSha256": "ZA+ioF8oUWlbnpYEkVI9xeecfXVagaVX201Pd8lQo+o="
             }
           },
-          "AppointmentUnderscoreclLambdaVersionb4A1nsZuqrPeuXEK7NHdJtomW8XgyKQoHxc57uOJ8": {
+          "AppointmentUnderscoreclLambdaVersion9YRVGYcppDOixillehanLiWowaW9nGuvUJU9FQ7ArU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppointmentUnderscoreclLambdaFunction"
               },
-              "CodeSha256": "QpRDZ83qb7OHIKz5YP2Je2ITS8KguNSFOV7mti081EU="
+              "CodeSha256": "ZA+ioF8oUWlbnpYEkVI9xeecfXVagaVX201Pd8lQo+o="
             }
           },
-          "UpdateAppointmentStatusLambdaVersion7svNvXIF0xRG8x7KWrQp3Zv4bl2NnqjquuvOBfcDs": {
+          "UpdateAppointmentStatusLambdaVersionnGKfjvkv49pNDByUjK3ZAHlYNdXUtFXCpAcF2xqH3Y": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "UpdateAppointmentStatusLambdaFunction"
               },
-              "CodeSha256": "QpRDZ83qb7OHIKz5YP2Je2ITS8KguNSFOV7mti081EU="
+              "CodeSha256": "ZA+ioF8oUWlbnpYEkVI9xeecfXVagaVX201Pd8lQo+o="
             }
           },
           "ApiGatewayRestApi": {
@@ -679,7 +622,7 @@
               "GetAppointmentsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1757062788814": {
+          "ApiGatewayDeployment1757088225236": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -838,7 +781,7 @@
             ],
             "Properties": {
               "BatchSize": 10,
-              "EventSourceArn": "arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_PE",
+              "EventSourceArn": "arn:aws:sqs:us-east-1:257394458575:SQS_PE",
               "FunctionName": {
                 "Fn::GetAtt": [
                   "AppointmentUnderscorepeLambdaFunction",
@@ -855,7 +798,7 @@
             ],
             "Properties": {
               "BatchSize": 10,
-              "EventSourceArn": "arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_CL",
+              "EventSourceArn": "arn:aws:sqs:us-east-1:257394458575:SQS_CL",
               "FunctionName": {
                 "Fn::GetAtt": [
                   "AppointmentUnderscoreclLambdaFunction",
@@ -915,7 +858,7 @@
           "CreateAppointmentLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CreateAppointmentLambdaVersionZZofKfAoZGHzF1bdgYtHpE3WipcMbOQCOI54uCgNic"
+              "Ref": "CreateAppointmentLambdaVersionbT9YCi0hRPT3y7XyLDMZIBWrGDBtgdRCHREhTWvWA"
             },
             "Export": {
               "Name": "sls-rimac-appointments-dev-CreateAppointmentLambdaFunctionQualifiedArn"
@@ -924,7 +867,7 @@
           "GetAppointmentsLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "GetAppointmentsLambdaVersionabavNcbNoeKXPOnajXnkxFTMc3zW03cfOizg4gTQCt8"
+              "Ref": "GetAppointmentsLambdaVersion9dufMOqMs3kVbJobtLGpQ4f04c4JjF2bZpf694NGg"
             },
             "Export": {
               "Name": "sls-rimac-appointments-dev-GetAppointmentsLambdaFunctionQualifiedArn"
@@ -933,7 +876,7 @@
           "AppointmentUnderscorepeLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppointmentUnderscorepeLambdaVersioneZWAogunrfiGYRFJe6PgkZ8sKbMnxZMunMJVW9THeY"
+              "Ref": "AppointmentUnderscorepeLambdaVersionEjbH6e1qbTOgNxBIfhMV06RpOQ1QqFNNZWgeZV5c"
             },
             "Export": {
               "Name": "sls-rimac-appointments-dev-AppointmentUnderscorepeLambdaFunctionQualifiedArn"
@@ -942,7 +885,7 @@
           "AppointmentUnderscoreclLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppointmentUnderscoreclLambdaVersionb4A1nsZuqrPeuXEK7NHdJtomW8XgyKQoHxc57uOJ8"
+              "Ref": "AppointmentUnderscoreclLambdaVersion9YRVGYcppDOixillehanLiWowaW9nGuvUJU9FQ7ArU"
             },
             "Export": {
               "Name": "sls-rimac-appointments-dev-AppointmentUnderscoreclLambdaFunctionQualifiedArn"
@@ -951,7 +894,7 @@
           "UpdateAppointmentStatusLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "UpdateAppointmentStatusLambdaVersion7svNvXIF0xRG8x7KWrQp3Zv4bl2NnqjquuvOBfcDs"
+              "Ref": "UpdateAppointmentStatusLambdaVersionnGKfjvkv49pNDByUjK3ZAHlYNdXUtFXCpAcF2xqH3Y"
             },
             "Export": {
               "Name": "sls-rimac-appointments-dev-UpdateAppointmentStatusLambdaFunctionQualifiedArn"
@@ -1072,7 +1015,7 @@
     "pluginsData": {},
     "functions": {
       "createAppointment": {
-        "handler": "src/handlers/createAppointment.createAppointment",
+        "handler": "dist/handlers/createAppointment.createAppointment",
         "events": [
           {
             "http": {
@@ -1105,10 +1048,10 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CreateAppointmentLambdaVersionZZofKfAoZGHzF1bdgYtHpE3WipcMbOQCOI54uCgNic"
+        "versionLogicalId": "CreateAppointmentLambdaVersionbT9YCi0hRPT3y7XyLDMZIBWrGDBtgdRCHREhTWvWA"
       },
       "getAppointments": {
-        "handler": "src/handlers/getAppointments.getAppointments",
+        "handler": "dist/handlers/getAppointments.getAppointments",
         "events": [
           {
             "http": {
@@ -1141,14 +1084,14 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "GetAppointmentsLambdaVersionabavNcbNoeKXPOnajXnkxFTMc3zW03cfOizg4gTQCt8"
+        "versionLogicalId": "GetAppointmentsLambdaVersion9dufMOqMs3kVbJobtLGpQ4f04c4JjF2bZpf694NGg"
       },
       "appointment_pe": {
-        "handler": "src/handlers/appointment_pe.handler",
+        "handler": "dist/handlers/appointment_pe.handler",
         "events": [
           {
             "sqs": {
-              "arn": "arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_PE"
+              "arn": "arn:aws:sqs:us-east-1:257394458575:SQS_PE"
             }
           }
         ],
@@ -1158,14 +1101,14 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "AppointmentUnderscorepeLambdaVersioneZWAogunrfiGYRFJe6PgkZ8sKbMnxZMunMJVW9THeY"
+        "versionLogicalId": "AppointmentUnderscorepeLambdaVersionEjbH6e1qbTOgNxBIfhMV06RpOQ1QqFNNZWgeZV5c"
       },
       "appointment_cl": {
-        "handler": "src/handlers/appointment_cl.handler",
+        "handler": "dist/handlers/appointment_cl.handler",
         "events": [
           {
             "sqs": {
-              "arn": "arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_CL"
+              "arn": "arn:aws:sqs:us-east-1:257394458575:SQS_CL"
             }
           }
         ],
@@ -1175,10 +1118,10 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "AppointmentUnderscoreclLambdaVersionb4A1nsZuqrPeuXEK7NHdJtomW8XgyKQoHxc57uOJ8"
+        "versionLogicalId": "AppointmentUnderscoreclLambdaVersion9YRVGYcppDOixillehanLiWowaW9nGuvUJU9FQ7ArU"
       },
       "updateAppointmentStatus": {
-        "handler": "src/handlers/updateAppointmentStatus.handler",
+        "handler": "dist/handlers/updateAppointmentStatus.handler",
         "events": [
           {
             "eventBridge": {
@@ -1194,7 +1137,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "UpdateAppointmentStatusLambdaVersion7svNvXIF0xRG8x7KWrQp3Zv4bl2NnqjquuvOBfcDs"
+        "versionLogicalId": "UpdateAppointmentStatusLambdaVersionnGKfjvkv49pNDByUjK3ZAHlYNdXUtFXCpAcF2xqH3Y"
       }
     },
     "resources": {
@@ -1259,7 +1202,7 @@
     "artifact": "C:\\xampp\\htdocs\\prueba-rimac\\rimac-test\\.serverless\\rimac-appointments.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/rimac-appointments/dev/1757062795466-2025-09-05T08:59:55.466Z",
+    "artifactDirectoryName": "serverless/rimac-appointments/dev/1757088231759-2025-09-05T16:03:51.759Z",
     "artifact": "rimac-appointments.zip"
   }
 }
