@@ -1,29 +1,49 @@
-# Rimac Appointments Backend
+# Rimac Backend Challenge
 
-Backend para agendamiento de citas médicas para asegurados de Perú y Chile.
+Este proyecto implementa un backend serverless en AWS para la gestión de citas médicas, usando Node.js, TypeScript, DynamoDB y SNS.
 
-## Requerimientos
-- Serverless Framework
-- Node.js + TypeScript
-- AWS: API Gateway, Lambdas, DynamoDB, SNS, SQS, EventBridge, RDS (MySQL)
-- Documentación OpenAPI/Swagger
-- Pruebas unitarias
-- Principios SOLID y arquitectura limpia
+## Endpoints principales
 
-## Instalación
-```bash
-npm install
-```
+- **POST /appointments**
+	- Crea una cita médica.
+	- Body JSON: `{ insuredId, scheduleId, countryISO }`
+	- Respuesta: `{ message, appointment }`
+
+- **GET /appointments/{insuredId}**
+	- Obtiene todas las citas de un asegurado.
+	- Respuesta: `{ appointments: [...] }`
+
+## Documentación Swagger
+
+La documentación OpenAPI está en `docs/openapi.yaml`.
+Puedes visualizarla con [Swagger Editor](https://editor.swagger.io/) copiando el contenido del archivo.
 
 ## Despliegue
+
+El proyecto usa Serverless Framework. Para desplegar:
+
 ```bash
-npm run deploy
+npx serverless deploy
 ```
 
+Asegúrate de tener configuradas tus credenciales AWS y la región correcta (`us-east-2`).
+
 ## Pruebas
+
+Los tests de los endpoints están en la carpeta `tests/` y pueden ejecutarse con:
+
 ```bash
 npm test
 ```
 
-## Documentación
-- Ver `docs/openapi.yaml` y `docs/swagger-instructions.md`
+## Repositorio
+
+GitHub: https://github.com/filisc2025/rimac-backend.git
+
+## Autor
+
+Fili Sanchez Condori
+
+---
+
+Para dudas o soporte, revisa el archivo `docs/swagger-instructions.md` o contacta por GitHub.
