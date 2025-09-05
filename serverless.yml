@@ -1,0 +1,97 @@
+service: rimac-appointments
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-2
+  environment:
+    DYNAMODB_TABLE: AppointmentTable
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:GetItem
+            - dynamodb:Query
+            - dynamodb:UpdateItem
+          Resource:
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/AppointmentTable"
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+            - sqs:ReceiveMessage
+            - sqs:DeleteMessage
+            - sqs:GetQueueAttributes
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource: "*"
+        - Effect: Allow
+          Action:
+            - events:PutEvents
+          Resource: "*"
+
+
+functions:
+  createAppointment:
+    handler: src/handlers/createAppointment.createAppointment
+    events:
+      - http:
+          path: appointments
+          method: post
+          cors: true
+  getAppointments:
+    handler: src/handlers/getAppointments.getAppointments
+    events:
+      - http:
+          path: appointments/{insuredId}
+          method: get
+          cors: true
+  appointment_pe:
+    handler: src/handlers/appointment_pe.handler
+    events:
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_PE # Reemplaza YOUR_ACCOUNT_ID por el ID de tu cuenta
+  appointment_cl:
+    handler: src/handlers/appointment_cl.handler
+    events:
+      - sqs:
+          arn: arn:aws:sqs:us-east-1:YOUR_ACCOUNT_ID:SQS_CL # Reemplaza YOUR_ACCOUNT_ID por el ID de tu cuenta
+  updateAppointmentStatus:
+    handler: src/handlers/updateAppointmentStatus.handler
+    events:
+      - eventBridge:
+          pattern:
+            source:
+              - appointment
+            detail-type:
+              - AppointmentConformity
+
+resources:
+  Resources:
+    AppointmentTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: AppointmentTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+    SNSPE:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: SNS_PE_RIMAC
+    SNSCL:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: SNS_CL_RIMAC
+    EventBus:
+      Type: AWS::Events::EventBus
+      Properties:
+        Name: rimac-appointments-bus
